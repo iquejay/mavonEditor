@@ -27,27 +27,20 @@
               <button @click="imgreplace">imgreplace</button>
               <input type="text" v-model="imgName" />
               <button @click="imgdelete">delete</button>
-              <div class="switch-code-style">
-                <span>code style:</span>
-                <select v-model="codeStyle">
-                  <option v-for="(val, key) in styles" :value="key">{{ key }}</option>
-                </select>
-              </div>
             </div>
             <mavon-editor ref=md :subfield="subfield" :toolbarsFlag="toolbarsFlag" :editable="editable"
                           :language="d_language" @change="change" @save="saveone" :ishljs="true" class="item-editor" v-model="help1"
                           :autofocus="autofocus"
                           :shortCut="true"
-                          :externalLink="external_link"
                           @imgAdd="$imgAdd" @imgDel="$imgDel" @subfieldtoggle="$subfieldtoggle" @previewtoggle="$previewtoggle"
                           :imageFilter="image_filter"
                           :boxShadow="true"
                           :scrollStyle="true"
                           :transition="true"
-                          :codeStyle="codeStyle"
                           box-shadow-style="0 2px 12px 0 rgba(0, 0, 0, 0.1)"
                           toolbars-background="#ffffff"
-                          preview-background="#fbfbfb">
+                          preview-background="#fbfbfb"
+                          :markdown-options="markdownOptions">
                 <!-- <template slot="left-toolbar-before">
                     左工具栏前
                 </template>
@@ -87,7 +80,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import styles from '../lib/core/hljs/lang.hljs.css.js'
     import {CONFIG} from '../lib/config.js'
     export default {
         name: 'app',
@@ -114,26 +106,6 @@
                 editable: true,
                 toolbarsFlag: true,
                 img_file: {},
-                external_link: {
-                    markdown_css: function() {
-                        return '/markdown/github-markdown.min.css';
-                    },
-                    hljs_js: function() {
-                        return '/highlightjs/highlight.min.js';
-                    },
-                    hljs_css: function(css) {
-                        return '/highlightjs/styles/' + css + '.min.css';
-                    },
-                    hljs_lang: function(lang) {
-                        return '/highlightjs/languages/' + lang + '.min.js';
-                    },
-                    katex_css: function() {
-                        return '/katex/katex.min.css';
-                    },
-                    katex_js: function() {
-                        return '/katex/katex.min.js';
-                    }
-                },
                 toolbar_settings: {
                     undo: true, // 上一步
                     redo: true, // 下一步
@@ -168,8 +140,10 @@
                     console.log(file);
                 },
                 imgName: '',
-                codeStyle: "github",
-                styles
+                markdownOptions: {
+                    theme: 'material-lighter',
+                    highlightCdn: 'https://i.epay.126.net/a/docs/shiki/'
+                }
             }
         },
         created () {
@@ -186,8 +160,6 @@
             var toolbar_left = md.$refs.toolbar_left;
             var diy = this.$refs.diy;
             toolbar_left.$el.append(diy)
-            // toolbar_left.$el.append(diy.$el)
-            // console.log(toolbar_left)
         },
         methods: {
             clearCache() {

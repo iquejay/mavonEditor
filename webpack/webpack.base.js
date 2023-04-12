@@ -16,7 +16,6 @@ var WebpackMd5Hash = require('webpack-md5-hash');
 // var WebpackSplitHash = require('webpack-split-hash');
 // 压缩css
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var fs = require("fs");
 // var postcss = require('postcss-loader')
 
@@ -40,7 +39,7 @@ module.exports = {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 // exclude: /.*node_modules((?!auto-textarea).)*$/
-                // exclude: /node_modules/
+                exclude: path.resolve(__dirname, '../src/lib/markdown/open-docs-core.umd.js'),
                 include: [
                     path.resolve(__dirname, '../src'),
                     fs.realpathSync('node_modules/auto-textarea')
@@ -132,19 +131,6 @@ module.exports = {
             cssProcessor: require('cssnano'),
             cssProcessorOptions: { discardComments: { removeAll: true } },
             canPrint: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, '../resources/highlight.js-11.3.1'),
-            to: path.resolve(__dirname, '../dist/highlightjs')
-        }, {
-            from: path.resolve(__dirname, '../resources/markdown'),
-            to: path.resolve(__dirname, '../dist/markdown')
-        }, {
-            context: 'node_modules/katex/dist',
-            from: {
-                glob: `${path.resolve(__dirname, '../node_modules/katex/dist')}/**/*.+(min.js|min.css|ttf|woff|woff2)`
-            },
-            to: path.resolve(__dirname, '../dist/katex')
-        }])
+        })
     ]
 }
