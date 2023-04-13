@@ -1,6 +1,19 @@
 <template>
     <div class="v-left-item">
         <slot name="left-toolbar-before" />
+        <button type="button" v-if="toolbars.undo" @click="$clicks('undo')" class="op-icon fa fa-mavon-undo"
+                aria-hidden="true" :title="`${d_words.tl_undo} (ctrl+z)`"></button>
+        <button type="button" v-if="toolbars.redo" @click="$clicks('redo')" class="op-icon fa fa-mavon-repeat"
+                aria-hidden="true"
+                :title="`${d_words.tl_redo} (ctrl+y)`"></button>
+        <button type="button" v-if="toolbars.trash" @click="$clicks('trash')" class="op-icon fa fa-mavon-trash-o"
+                aria-hidden="true"
+                :title="`${d_words.tl_trash} (ctrl+breakspace)`"></button>
+        <button type="button" v-if="toolbars.save" @click="$clicks('save')" class="op-icon fa fa-mavon-floppy-o"
+                aria-hidden="true"
+                :title="`${d_words.tl_save} (ctrl+s)`"></button>
+        <span v-if="toolbars.undo || toolbars.redo || toolbars.trash || toolbars.save"
+              class="op-icon-divider"></span>
         <button :disabled="!editable" type="button" v-if="toolbars.bold" @click="$clicks('bold')"
                 class="op-icon fa fa-mavon-bold" aria-hidden="true"
                 :title="`${d_words.tl_bold} (ctrl+b)`"></button>
@@ -97,19 +110,6 @@
         <button :disabled="!editable" type="button" v-if="toolbars.table" @click="$clicks('table')"
                 class="op-icon fa fa-mavon-table" aria-hidden="true"
                 :title="`${d_words.tl_table} (ctrl+alt+t)`"></button>
-        <span v-if="toolbars.link || toolbars.imagelink || toolbars.code || toolbars.table"
-              class="op-icon-divider"></span>
-        <button type="button" v-if="toolbars.undo" @click="$clicks('undo')" class="op-icon fa fa-mavon-undo"
-                aria-hidden="true" :title="`${d_words.tl_undo} (ctrl+z)`"></button>
-        <button type="button" v-if="toolbars.redo" @click="$clicks('redo')" class="op-icon fa fa-mavon-repeat"
-                aria-hidden="true"
-                :title="`${d_words.tl_redo} (ctrl+y)`"></button>
-        <button type="button" v-if="toolbars.trash" @click="$clicks('trash')" class="op-icon fa fa-mavon-trash-o"
-                aria-hidden="true"
-                :title="`${d_words.tl_trash} (ctrl+breakspace)`"></button>
-        <button type="button" v-if="toolbars.save" @click="$clicks('save')" class="op-icon fa fa-mavon-floppy-o"
-                aria-hidden="true"
-                :title="`${d_words.tl_save} (ctrl+s)`"></button>
         <slot name="left-toolbar-after" />
 
         <!-- 添加image链接 -->
