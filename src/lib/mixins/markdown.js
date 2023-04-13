@@ -1,5 +1,10 @@
 /* eslint-disable no-undef */
 import sanitizer from '../core/sanitizer.js'
+import miip from 'markdown-it-images-preview'
+
+function initMarkdownIt(md) {
+  md.use(miip)
+}
 
 export default {
   data() {
@@ -8,7 +13,7 @@ export default {
     }
   },
   async created() {
-    this.markdownIt = await this._initMarkdown();
+    await this._getMarkdownIt();
     if (!this.html) {
         this.markdownIt.set({ html: false });
         this.xssOptions = false;
@@ -17,13 +22,14 @@ export default {
     }
   },
   methods: {
-    async _initMarkdown() {
+    async _getMarkdownIt() {
       if (this.markdownIt) return this.markdownIt
-      return OpenDocsCore.markdown.createMarkdownRenderer(this.markdownOptions)
+      this.markdownIt = await OpenDocsCore.markdown.createMarkdownRenderer(this.markdownOptions)
+      initMarkdownIt(this.markdownIt)
+      return this.markdownIt
     },
     $render(src, func) {
-      this._initMarkdown().then((markdownIt) => {
-        this.markdownIt = markdownIt
+      this._getMarkdownIt().then(() => {
         var res = this.markdownIt.render(src);
         func(res);
       })
